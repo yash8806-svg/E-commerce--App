@@ -13,7 +13,6 @@ function App() {
     <>
       <BrowserRouter>
         <ProductProvider>
-          <h1 className='text-4xl font-bold' >E-Commerce App</h1>
           <Navbar />
           <Routes>
             <Route path='/' element={<ProductsList />} />

@@ -3,16 +3,30 @@ import { useSelector } from 'react-redux'
 
 const Navbar = () => {
   const cart = useSelector(state => state.cart.cartItems);
-  console.log(cart)
+  const totalItems = cart.reduce((acc, curr) => acc + curr.quantity, 0);
 
   return (
     <>
-      <div className="flex align-middle justify-center gap-3 mb-12 mt-4 w-screen font-bold  ">
-        <h1>E-commerece App</h1>
-        <Link  to="/">Home</Link> 
-        <Link to="/cart">Your Cart</Link> 
-        <Link to="/favorite">Fav</Link> 
-        <Link to="/orders">Orders</Link>
+      <div className="flex items-center justify-between p-4 px-8 gap-3 mb-12  w-screen font-bold bg-blue-950 text-white ">
+        <div className="logo">
+          <h1 className='text-3xl' >E-commerece App</h1>
+        </div>
+        <div className="flex justify-around gap-4 cursor-pointer w-100">
+          <Link to="/" className='hover:underline' >Home</Link>
+          <Link to="/cart" className='hover:underline' >
+            <span>🛒</span>
+            {totalItems > 0 && (
+              <>
+              <span className="right-2 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {totalItems}
+              </span> <br />
+               <span className='ml-1' >Cart</span>
+              </>
+            )}
+          </Link>
+          <Link to="/favorite" className='hover:underline' >Fav</Link>
+          <Link to="/orders" className='hover:underline' >Orders</Link>
+        </div>
       </div>
     </>
   )

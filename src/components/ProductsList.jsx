@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { addCart } from '../utils/slice';
 import { useDispatch } from 'react-redux';
 import { useGetProductsQuery } from '../utils/ProductApi';
+import Stars from './Stars';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const ProductsList = () => {
     const { toggleWishList, wishList } = useContext(ProductContext);
@@ -14,8 +16,9 @@ const ProductsList = () => {
 
     const dispatch = useDispatch();
 
+    const wishListId = useMemo(() => new Set(wishList.map(item => item.id)), [wishList]);
+
     const categories = [...new Set(products.map((item) => item.category))]
-    console.log(categories);
 
     let filterProducts = useMemo(() => {
         let result = products.filter((item) =>
@@ -29,8 +32,6 @@ const ProductsList = () => {
 
         return result;
     }, [products, search, category, sort]);
-
-    console.log(products)
 
     if (isLoading) return <p>Loading...</p>
     if (isError) return <p>Error...</p>
@@ -66,29 +67,31 @@ const ProductsList = () => {
                         {filterProducts.length === 0 ? (
                             <p>No matching produtcs</p>
                         ) : (
-                            filterProducts.map(p => (
-                                <div key={p.id} className="border-1 flex-col items-center justify-center p-4" >
-                                    <img className='w-full h-40 object-contain' src={p.image} alt="product-image" />
-                                    <div className="flex-col grid">
-                                        <h1 className='font-bold flex justify-center '>{p.category}</h1>
-                                        <button className='border-1 rounded-2xl p-1 w-50 flex justify-center m-auto items-center font-medium  bg-blue-900 text-white cursor-pointer ' onClick={() => dispatch(addCart(p))}>Add to cart</button>
-                                        <button
-                                            onClick={() => toggleWishList(p)}
-                                            className={`mt-2 px-4 py-2 rounded-lg font-medium transition cursor-pointer
-                                               ${wishList.some(item => item.id === p.id)
-                                                    ? "bg-red-600 text-white hover:bg-red-700"
-                                                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"} // If not in favorites`}
-                                        >
-                                            {wishList.some(item => item.id === p.id)
-                                                ? "❤️ Remove from Fav"
-                                                : "🤍 Add to Fav"}
-                                        </button>
-
-                                        <h1 className='font-bold'>${p.price}</h1>
-                                        <Link className='text-purple-800 flex items-center justify-center' to={`/details/${p.id}`}>Read More...</Link>
+                            filterProducts.map(p => {
+                                const isWishList = wishListId.has(p.id);
+                                return (
+                                    <div key={p.id} className=" relative border-1 rounded-2xl flex-col items-center justify-center p-4">
+                                        <Link to={`/details/${p.id}`} >
+                                            <img className='w-full h-40 object-contain' src={p.image} alt="product-image" />
+                                        </Link>
+                                        <div className="flex-col grid">
+                                            <h1 className='font-bold flex justify-center'>{p.category}</h1>
+                                            <h4 className='flex items-center justify-center mt-1 mb-4'> <Stars rating={p.rating?.rate || 0} /> <span className="text-gray-600 text-sm" >({p.rating?.count} reviews)</span></h4>
+                                            <button className='rounded-2xl p-1 w-50 flex justify-center m-auto bg-blue-900 text-white transition-all duration-300 cursor-pointer hover:bg-blue-950'
+                                                onClick={() => dispatch(addCart(p))}>Add to cart</button>
+                                            <button
+                                                onClick={() => toggleWishList(p)}
+                                                className={`absolute top-2 right-2 p-2 rounded-full transition cursor-pointer
+                                                ${isWishList
+                                                        ? "bg-red-600 text-white hover:bg-red-700"
+                                                        : "bg-gray-200 text-gray-800 hover:bg-gray-300"}`}
+                                            > {isWishList ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+                                            </button>
+                                            <h1 className='font-bold text-red-600 mt-2.5'>${p.price}</h1>
+                                        </div>
                                     </div>
-                                </div>
-                            ))
+                                )
+                            })
                         )}
                     </div>
                 </div>

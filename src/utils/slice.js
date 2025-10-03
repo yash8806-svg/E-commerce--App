@@ -4,7 +4,6 @@ const initialState = {
     cartItems: JSON.parse(localStorage.getItem("carts")) || [],
 }
 
-
 export const cartSlice = createSlice({
     name: "cart",
     initialState,

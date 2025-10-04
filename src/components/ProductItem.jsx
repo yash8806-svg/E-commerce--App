@@ -7,7 +7,6 @@ const ProductItem = () => {
     const { id } = useParams();
 
     const item = products.find(product => product.id === Number(id));
-    console.log(item)
 
     if (isLoading) return <p className="text-center">Loading product...</p>;
     if (isError) return <p className="text-center text-red-600">Failed to load product.</p>;

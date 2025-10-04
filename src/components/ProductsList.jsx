@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState,useEffect } from 'react'
 import { ProductContext } from '../utils/context'
 import { Link } from 'react-router-dom';
 import { addCart } from '../utils/slice';
@@ -11,10 +11,17 @@ const ProductsList = () => {
     const { toggleWishList, wishList } = useContext(ProductContext);
     const { data: products = [], isLoading, isError } = useGetProductsQuery();
     const [search, setSearch] = useState("");
+    const [debounceSearch, setDebounceSearch] = useState(search);
     const [category, setCategory] = useState("All");
     const [sort, setSort] = useState("");
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+      const handler = setTimeout(() => setDebounceSearch(search), 300);
+    return () => clearTimeout(handler);
+    }, [search])
+    
 
     const wishListId = useMemo(() => new Set(wishList.map(item => item.id)), [wishList]);
 
@@ -22,7 +29,7 @@ const ProductsList = () => {
 
     let filterProducts = useMemo(() => {
         let result = products.filter((item) =>
-            item.title.toLowerCase().includes(search.toLowerCase()) &&
+            item.title.toLowerCase().includes(debounceSearch.toLowerCase()) &&
             (category === "All" || item.category === category)
         )
         if (sort === "low-high") result.sort((a, b) => a.price - b.price);
@@ -31,7 +38,7 @@ const ProductsList = () => {
             result.sort((a, b) => a.title.localeCompare(b.title));
 
         return result;
-    }, [products, search, category, sort]);
+    }, [products, debounceSearch, category, sort]);
 
     if (isLoading) return <p>Loading...</p>
     if (isError) return <p>Error...</p>
@@ -77,7 +84,7 @@ const ProductsList = () => {
                                         <div className="flex-col grid">
                                             <h1 className='font-bold flex justify-center'>{p.category}</h1>
                                             <h4 className='flex items-center justify-center mt-1 mb-4'> <Stars rating={p.rating?.rate || 0} /> <span className="text-gray-600 text-sm" >({p.rating?.count} reviews)</span></h4>
-                                            <button className='rounded-2xl p-1 w-50 flex justify-center m-auto bg-blue-900 text-white transition-all duration-300 cursor-pointer hover:bg-blue-950'
+                                            <button className='rounded-2xl p-1 w-50 flex justify-center m-auto bg-blue-900 text-white transition-colors duration-300 cursor-pointer hover:bg-blue-950'
                                                 onClick={() => dispatch(addCart(p))}>Add to cart</button>
                                             <button
                                                 onClick={() => toggleWishList(p)}

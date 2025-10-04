@@ -1,10 +1,11 @@
-import React, { useState} from 'react'
+import React, { useContext, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { ProductContext } from '../utils/context';
 
 const CheckOut = () => {
   const cart = useSelector((state) => state.cart.cartItems);
-
-  const total = cart.reduce((acc,curr)=>acc + curr.price*curr.quantity,0);
+  const total = cart.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
+  const { addOnOrder } = useContext(ProductContext);
 
   const [form, setForm] = useState({
     name: "",
@@ -18,7 +19,7 @@ const CheckOut = () => {
   }
 
   const handleOrder = (e) => {
- e.preventDefault();
+    e.preventDefault();
 
     if (!form.name || !form.email || !form.address) {
       alert("Please fill the boxes!");
@@ -26,16 +27,15 @@ const CheckOut = () => {
     }
 
     const newOrder = {
-      id:Date.now(),
-      user:form,
-      item:cart,
+      id: Date.now(),
+      user: form,
+      item: cart,
       total,
-      date:new Date().toLocaleString()
+      date: new Date().toLocaleString()
     }
-     addOnOrder(newOrder);
-     setCart([]);
-         alert("✅ Order placed successfully!");
-      setForm({ name: "", email: "", address: "", payment: "cod" });
+    addOnOrder(newOrder);
+    alert("✅ Order placed successfully!");
+    setForm({ name: "", email: "", address: "", payment: "cod" });
   }
 
   return (

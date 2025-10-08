@@ -1,40 +1,9 @@
-// import React, { useContext } from 'react'
-// import { ProductContext } from '../utils/context'
-
-// const Orders = () => {
-//     const { orders } = useContext(ProductContext);
-//     return (
-//         <div>
-//             <h2>My Orders</h2>
-//             <div>
-
-//                 {orders.length === 0 ? (
-//                     <p>No orders yet.</p>
-//                 ) : (
-//                     orders.map(ord => (
-//                         <div key={ord.id}>
-//                             <p><strong>Date:</strong> {ord.date}</p>
-//                             <p><strong>Total:</strong> ${ord.total}</p>
-//                             <ul>
-//                                 {ord.items && ord.items.map((item, i) => (
-//                                     <li key={i}>{item.title} x{item.quantity}</li>
-//                                 ))}
-//                             </ul>
-//                         </div>
-//                     ))
-//                 )}
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default Orders
-
-import React, { useContext } from 'react';
+import React, { useState,useContext, useEffect } from 'react';
 import { ProductContext } from '../utils/context';
 
 const Orders = () => {
   const { orders } = useContext(ProductContext);
+  const recentOrders = orders.slice(-5).reverse();
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -44,7 +13,7 @@ const Orders = () => {
         <p className="text-center text-gray-500 text-lg">No orders yet.</p>
       ) : (
         <div className="grid gap-6">
-          {orders.map((ord) => (
+          {recentOrders.map((ord) => (
             <div
               key={ord.id}
               className="border rounded-2xl p-6 bg-white shadow-md hover:shadow-lg transition-shadow duration-300"

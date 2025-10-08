@@ -7,7 +7,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between p-4 px-8 gap-3 mb-12 w-screen font-bold bg-blue-950 text-white ">
+      <div className="flex items-center justify-between p-4 px-8 gap-3  w-screen font-bold bg-blue-950 text-white ">
         <div className="logo">
           <h1 className='text-3xl' >E-commerece App</h1>
         </div>

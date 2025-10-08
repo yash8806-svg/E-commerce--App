@@ -45,12 +45,13 @@ const ProductsList = () => {
 
     return (
         <>
-            <div className="products-list">
+            <div className="products-list mt-12">
                 <div className="flex items-center justify-center gap-3">
                     <input type="text"
+                    placeholder='Search for products, brands'
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="border-1 w-70 p-0.5"
+                        className=" bg-gray-300 text-black w-120 p-2 pl-5 rounded-2xl "
                     />
 
                     <select value={category} onChange={(e) => setCategory(e.target.value)}
@@ -62,7 +63,7 @@ const ProductsList = () => {
                         ))}
                     </select>
 
-                    <select className='border-1 p-0.5 w-30 cursor-pointer ' value={sort} onChange={(e) => setSort(e.target.value)}>
+                    <select className='border-1 p-0.5 w-30 cursor-pointer' value={sort} onChange={(e) => setSort(e.target.value)}>
                         <option value="">Default</option>
                         <option value="low-high">low-high</option>
                         <option value="high-low">high-low</option>
@@ -88,11 +89,11 @@ const ProductsList = () => {
                                                 onClick={() => dispatch(addCart(p))}>Add to cart</button>
                                             <button
                                                 onClick={() => toggleWishList(p)}
-                                                className={`absolute top-2 right-2 p-2 rounded-full transition cursor-pointer
+                                                className={`absolute top-2 right-2 p-2  rounded-full transition cursor-pointer
                                                 ${isWishList
                                                         ? "bg-red-600 text-white hover:bg-red-700"
                                                         : "bg-gray-200 text-gray-800 hover:bg-gray-300"}`}
-                                            > {isWishList ? <FaHeart size={20} /> : <FaRegHeart size={20} />}
+                                            > {isWishList ? <FaHeart size={10} /> : <FaRegHeart size={10} />}
                                             </button>
                                             <h1 className='font-bold text-red-600 mt-2.5'>${p.price}</h1>
                                         </div>

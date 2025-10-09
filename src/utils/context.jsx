@@ -7,7 +7,7 @@ export const ProductProvider = ({ children }) => {
         return saved ? JSON.parse(saved) : [];
     });
 
-    const [recentOrders, setRecentOrders] = useState([]);
+    
     const [orders, setOrders] = useState(() => {
         try {
             const saved = localStorage.getItem("orders");
@@ -17,10 +17,6 @@ export const ProductProvider = ({ children }) => {
             return [];
         }
     });
-
-    const handleOrder = (order) => {
-  
-    }
 
 
     useEffect(() => {

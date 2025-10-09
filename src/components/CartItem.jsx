@@ -19,7 +19,6 @@ const CartItem = React.memo(({ item }) => {
         style={{ height: "200px" }}
         src={item.image}
         alt={item.title}
-        loading="lazy"
       />
       <div className='ml-8'>
         <h2 className='font-medium mb-3'>Category: {item.category}</h2>

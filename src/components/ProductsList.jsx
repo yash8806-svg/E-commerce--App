@@ -45,7 +45,7 @@ const ProductsList = () => {
 
     return (
         <>
-            <div className="products-list mt-12">
+            <div className="mt-12">
                 <div className="flex items-center justify-center gap-3">
                     <input type="text"
                     placeholder='Search for products, brands'
@@ -78,7 +78,7 @@ const ProductsList = () => {
                             filterProducts.map(p => {
                                 const isWishList = wishListId.has(p.id);
                                 return (
-                                    <div key={p.id} className=" relative border-1 rounded-2xl flex-col items-center justify-center p-4">
+                                    <div key={p.id} className=" relative border-1 border-gray-200  shadow-md hover:shadow-2xl rounded-2xl flex-col items-center justify-center p-4">
                                         <Link to={`/details/${p.id}`} >
                                             <img className='w-full h-40 object-contain' src={p.image} alt="product-image" />
                                         </Link>

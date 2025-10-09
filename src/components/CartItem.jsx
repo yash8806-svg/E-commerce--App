@@ -14,7 +14,7 @@ const CartItem = React.memo(({ item }) => {
   );
 
   return (
-    <div className="mb-3 flex items-center border-1 p-4">
+    <div className="mb-3 flex items-center border-1 border-gray-300 shadow-lg p-4">
       <img
         style={{ height: "200px" }}
         src={item.image}
@@ -27,7 +27,7 @@ const CartItem = React.memo(({ item }) => {
         <div className="w-28 rounded-2xl p-0.5 pl-1.5 flex mb-2 bg-yellow-500 font-bold">
           <label htmlFor="quantity">Quantity</label>
           <select
-            className='border-0 bg-transparent outline-none cursor-pointer'
+            className='bg-transparent outline-none cursor-pointer'
             value={item.quantity}
             onChange={(e) =>
               dispatch(updateCart({ id: item.id, quantity: Number(e.target.value) }))

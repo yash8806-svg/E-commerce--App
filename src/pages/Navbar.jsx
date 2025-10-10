@@ -8,17 +8,11 @@ const Navbar = () => {
   const cart = useSelector(state => state.cart.cartItems);
   const totalItems = cart.reduce((acc, curr) => acc + curr.quantity, 0);
   const [search, setSearch] = useState("");
-  const [debounceSearch, setDebounceSearch] = useState(search);
   const {setSearchTerm} = useContext(ProductContext);
 
   useEffect(() => {
-    const handler = setTimeout(() => setDebounceSearch(search), 300);
-    return () => clearTimeout(handler);
-  }, [search])
-
-  useEffect(() => {
-    if (setSearchTerm)  setSearchTerm(debounceSearch);
-  }, [debounceSearch, setSearchTerm]);
+    if (setSearchTerm)  setSearchTerm(search);
+  }, [search, setSearchTerm]);
 
 
 

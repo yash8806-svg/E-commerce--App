@@ -1,32 +1,37 @@
 import { useParams } from 'react-router-dom';
 import { useGetProductsQuery } from '../utils/ProductApi';
 import Stars from './Stars';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { addCart } from '../utils/slice';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ProductItem = () => {
     const { data: products = [], isLoading, isError } = useGetProductsQuery();
     const { id } = useParams();
-    const [releatedCategory, setReleatedCategory] = useState([]);
-
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const item = products.find(product => product.id === Number(id));
 
-    useEffect(() => {
-        if (item) {
-            const filtered = products.filter(product =>
+     const releatedCategory =  useMemo(() => {
+        if (!item) return []; 
+            return products.filter(product =>
                 product.category === item.category &&
                 product.id !== id
             );
-            setReleatedCategory(filtered);
-        }
     }, [item, products]);
 
     const addToCart = useCallback(
         (product) => {
             dispatch(addCart(product));
     }, [dispatch]);
+
+    const buyNowHnadler = (product) => {
+          dispatch(addCart({...product,quantity:1}));
+          navigate("/checkout");
+
+    } 
 
     if (isLoading) return <p className="text-center">Loading product...</p>;
     if (isError) return <p className="text-center text-red-600">Failed to load product.</p>;
@@ -45,7 +50,7 @@ const ProductItem = () => {
                                 </div>
                                 <div className="flex items-center justify-center gap-2 mt-4">
                                     <button onClick={() => addToCart(item)} className='rounded-2xl p-3 w-40 flex justify-center m-auto bg-blue-700 text-white transition-colors duration-300 cursor-pointer hover:bg-blue-950' >Add to Cart</button>
-                                    <button className='rounded-2xl p-3 w-40 flex justify-center m-auto bg-blue-900 text-white transition-colors duration-300 cursor-pointer hover:bg-blue-700' >Buy Now</button>
+                                    <button onClick={()=>buyNowHnadler(item)} className='rounded-2xl p-3 w-40 flex justify-center m-auto bg-blue-900 text-white transition-colors duration-300 cursor-pointer hover:bg-blue-700' >Buy Now</button>
                                 </div>
                             </div>
                             <div className='p-10 border-1 border-gray-100 shadow-lg'>
@@ -64,11 +69,11 @@ const ProductItem = () => {
                         {releatedCategory.length > 0 && (
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                                 {releatedCategory.map(item => (
-                                    <div key={item.id} className='flex  border-1 border-gray-200 shadow-lg hover:shadow-2xl transition duration-300 scale-105 ease-in-out p-4 w-50 h-60 flex-col items-center justify-center'>
+                                    <Link to={`/details/${item.id}`} key={item.id} className='flex  border-1 border-gray-200 shadow-lg hover:shadow-2xl transition duration-300 scale-105 ease-in-out p-4 w-50 h-60 flex-col items-center justify-center'>
                                         <img src={item.image} alt="product-image" className='h-20' />
                                         <p className="text-red-700 font-semibold" >${item.price}</p>
                                         <p className='line-clamp-2' >{item.title}</p>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         )}

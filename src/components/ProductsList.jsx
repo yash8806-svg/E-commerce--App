@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState,useEffect } from 'react'
+import React, { useContext, useMemo, useState,} from 'react'
 import { ProductContext } from '../utils/context'
 import { Link } from 'react-router-dom';
 import { addCart } from '../utils/slice';
@@ -8,28 +8,20 @@ import Stars from './Stars';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const ProductsList = () => {
-    const { toggleWishList, wishList } = useContext(ProductContext);
+    const { toggleWishList, wishList,searchTerm } = useContext(ProductContext);
     const { data: products = [], isLoading, isError } = useGetProductsQuery();
-    const [search, setSearch] = useState("");
-    const [debounceSearch, setDebounceSearch] = useState(search);
     const [category, setCategory] = useState("All");
     const [sort, setSort] = useState("");
 
     const dispatch = useDispatch();
-
-    useEffect(() => {
-      const handler = setTimeout(() => setDebounceSearch(search), 300);
-    return () => clearTimeout(handler);
-    }, [search])
-    
-
+   
     const wishListId = useMemo(() => new Set(wishList.map(item => item.id)), [wishList]);
 
     const categories = [...new Set(products.map((item) => item.category))]
 
     let filterProducts = useMemo(() => {
         let result = products.filter((item) =>
-            item.title.toLowerCase().includes(debounceSearch.toLowerCase()) &&
+            item.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
             (category === "All" || item.category === category)
         )
         if (sort === "low-high") result.sort((a, b) => a.price - b.price);
@@ -38,7 +30,7 @@ const ProductsList = () => {
             result.sort((a, b) => a.title.localeCompare(b.title));
 
         return result;
-    }, [products, debounceSearch, category, sort]);
+    }, [products, searchTerm, category, sort]);
 
     if (isLoading) return <p>Loading...</p>
     if (isError) return <p>Error...</p>
@@ -47,13 +39,6 @@ const ProductsList = () => {
         <>
             <div className="mt-12">
                 <div className="flex items-center justify-center gap-3">
-                    <input type="text"
-                    placeholder='Search for products, brands'
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className=" bg-gray-300 text-black w-120 p-2 pl-5 rounded-2xl "
-                    />
-
                     <select value={category} onChange={(e) => setCategory(e.target.value)}
                         className='border-1 p-0.5 cursor-pointer'
                     >

@@ -6,8 +6,8 @@ export const ProductProvider = ({ children }) => {
         const saved = localStorage.getItem("Favorites");
         return saved ? JSON.parse(saved) : [];
     });
+    const [searchTerm, setSearchTerm] = useState("");
 
-    
     const [orders, setOrders] = useState(() => {
         try {
             const saved = localStorage.getItem("orders");
@@ -44,7 +44,15 @@ export const ProductProvider = ({ children }) => {
     }
 
     return (
-        <ProductContext.Provider value={{ wishList, setWishList, toggleWishList, orders, addOnOrder }} >
+        <ProductContext.Provider value={{
+            wishList,
+            setWishList,
+            toggleWishList,
+            orders,
+            addOnOrder,
+            searchTerm,
+            setSearchTerm
+        }} >
             {children}
         </ProductContext.Provider>
     )

@@ -6,6 +6,9 @@ import { addCart } from '../utils/slice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { ProductContext } from '../utils/context';
+import { FaRegHeart,FaHeart } from 'react-icons/fa';
 
 const ProductItem = () => {
     const { data: products = [], isLoading, isError } = useGetProductsQuery();
@@ -13,25 +16,28 @@ const ProductItem = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const item = products.find(product => product.id === Number(id));
+    const { toggleWishList, wishList } = useContext(ProductContext);
 
-     const releatedCategory =  useMemo(() => {
-        if (!item) return []; 
-            return products.filter(product =>
-                product.category === item.category &&
-                product.id !== id
-            );
-    }, [item, products]);
+    const wishListId = useMemo(() => new Set(wishList.map(item => item.id)), [wishList]);
+
+    const releatedCategory = useMemo(() => {
+        if (!item) return [];
+        return products.filter(product =>
+            product.category === item.category &&
+            product.id !== Number(id)
+        );
+    }, [item, products,id]);
 
     const addToCart = useCallback(
         (product) => {
             dispatch(addCart(product));
-    }, [dispatch]);
+        }, [dispatch]);
 
     const buyNowHnadler = (product) => {
-          dispatch(addCart({...product,quantity:1}));
-          navigate("/checkout");
+        dispatch(addCart({ ...product, quantity: 1 }));
+        navigate("/checkout");
 
-    } 
+    }
 
     if (isLoading) return <p className="text-center">Loading product...</p>;
     if (isError) return <p className="text-center text-red-600">Failed to load product.</p>;
@@ -44,16 +50,24 @@ const ProductItem = () => {
                 <div className=" flex items-center flex-col justify-center shadow-lg gap-10 bg-white p-10 w-[90%] min-w-6xl ">
                     <div>
                         <div className="flex items-center justify-center gap-10">
-                            <div className='pl-8'>
+                            <div className='pl-8 relative'>
                                 <div className=" flex items-center justify-center">
                                     <img className='h-72 md:h-96 object-contain' src={item.image} alt={item.title} />
                                 </div>
                                 <div className="flex items-center justify-center gap-2 mt-4">
                                     <button onClick={() => addToCart(item)} className='rounded-2xl p-3 w-40 flex justify-center m-auto bg-blue-700 text-white transition-colors duration-300 cursor-pointer hover:bg-blue-950' >Add to Cart</button>
-                                    <button onClick={()=>buyNowHnadler(item)} className='rounded-2xl p-3 w-40 flex justify-center m-auto bg-blue-900 text-white transition-colors duration-300 cursor-pointer hover:bg-blue-700' >Buy Now</button>
+                                    <button onClick={() => buyNowHnadler(item)} className='rounded-2xl p-3 w-40 flex justify-center m-auto bg-blue-900 text-white transition-colors duration-300 cursor-pointer hover:bg-blue-700' >Buy Now</button>
                                 </div>
+                                <button
+                                    onClick={() => toggleWishList(item)}
+                                    className={`absolute top-2 right-2 p-2  rounded-full transition cursor-pointer
+                                                                                ${wishListId.has(item.id)
+                                            ? "bg-red-600 text-white hover:bg-red-700"
+                                            : "bg-gray-200 text-gray-800 hover:bg-gray-300"}`}
+                                > {wishListId.has(item.id) ? <FaHeart size={10} /> : <FaRegHeart size={10} />}
+                                </button>
                             </div>
-                            <div className='p-10 border-1 border-gray-100 shadow-lg'>
+                            <div className='p-10 border border-gray-100 shadow-lg'>
                                 <h2 className='font-medium mb-1 text-2xl'>Category:{item.category}</h2>
                                 <h4 className='flex items-center mt-2'> <Stars rating={item.rating?.rate || 0} /> <span className="text-gray-600 text-sm" >({item.rating?.count} reviews)</span></h4>
                                 <p className='mt-2'>{item.title}</p>

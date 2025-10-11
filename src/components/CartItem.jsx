@@ -2,6 +2,7 @@ import { updateCart, removeCart } from '../utils/slice';
 import { useDispatch } from 'react-redux';
 import Stars from './Stars';
 import { useState } from 'react';
+import React from 'react';
 
 const CartItem = React.memo(({ item }) => {
   const [quantity, setQuantity] = useState(1);

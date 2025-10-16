@@ -18,7 +18,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between p-4 px-8 gap-3  w-screen font-bold bg-blue-950 text-white ">
+      <div className="flex items-center justify-between p-4 px-8 gap-3 w-full font-bold bg-blue-950 text-white ">
         <div className="logo">
           <h1 className='text-3xl' >E-commerece App</h1>
         </div>
@@ -33,7 +33,7 @@ const Navbar = () => {
           />
         </div>
 
-        <div className="flex justify-around gap-4 cursor-pointer w-100">
+        <div className="flex justify-around gap-4 cursor-pointer">
           <Link to="/" className='hover:underline' >Home</Link>
           <Link to="/cart" className='hover:no-underline' >
             <span className='ml-1 hover:underline '>Cart</span>
@@ -55,3 +55,4 @@ const Navbar = () => {
 }
 
 export default Navbar
+

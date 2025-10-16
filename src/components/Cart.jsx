@@ -12,6 +12,7 @@ const Cart = () => {
   );
 
   return (
+    <div className="max-w-6xl mx-auto p-4" >
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className='text-4xl font-bold mb-5'>Total Amount: ${total.toFixed(2)}</h1>
 
@@ -31,6 +32,7 @@ const Cart = () => {
           Proceed to Checkout
         </Link>
       )}
+    </div>
     </div>
   );
 };

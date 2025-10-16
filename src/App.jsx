@@ -7,22 +7,21 @@ import Navbar from './pages/Navbar';
 import WishList from './components/WishList';
 import CheckOut from './components/CheckOut';
 import Orders from './components/Orders';
-import { useState } from 'react';
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <ProductProvider>
-          <Navbar/>
-          <Routes>
-            <Route path='/' element={<ProductsList/>} />
-            <Route path='/details/:id' element={<ProductItem />} />
-            <Route path='/cart' element={<Cart />} />
-            <Route path='/favorite' element={<WishList/>} />
-            <Route path='/checkout' element={<CheckOut/>} />
-            <Route path='/orders' element={<Orders/>} />
-          </Routes >
+              <Navbar />
+              <Routes>
+                <Route path='/' element={<ProductsList />} />
+                <Route path='/details/:id' element={<ProductItem />} />
+                <Route path='/cart' element={<Cart />} />
+                <Route path='/favorite' element={<WishList />} />
+                <Route path='/checkout' element={<CheckOut />} />
+                <Route path='/orders' element={<Orders />} />
+              </Routes >
         </ProductProvider>
       </BrowserRouter>
     </>
